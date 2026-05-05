@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fiesta de Grado · Sebastian Estrada Carranza</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Cinzel:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --ease-out: cubic-bezier(0.23,1,0.32,1);
+  --gold:      #C9A03A;
+  --gold-mid:  #A07828;
+  --gold-dark: #7A5010;
+  --gold-text: #6B4E10;
+  --vino:      #7B1C3B;
+  --vino-dark: #5A1228;
+  --cream:     #fdfbf4;
+  --parchment: #ede0b8;
+}
+
+body{font-family:'Cinzel',serif;overflow-x:hidden;min-height:100vh}
+
+/* ── BACKGROUND ─────────────────────────────── */
+.bg{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 0%,  #e8d49a 0%,transparent 65%),
+    radial-gradient(ellipse 70% 50% at 15% 50%, #d4b870 0%,transparent 60%),
+    radial-gradient(ellipse 70% 50% at 85% 50%, #c9a94e 0%,transparent 60%),
+    radial-gradient(ellipse 80% 60% at 50% 100%,#dfc47a 0%,transparent 65%),
+    #ede0b8;
+}
+.bg::after{
+  content:'';position:absolute;inset:0;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+}
+.dust{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+.mote{
+  position:absolute;border-radius:50%;
+  background:radial-gradient(circle,rgba(180,130,40,.5),transparent);
+  animation:rise var(--d) var(--delay) infinite ease-in-out;
+}
+@keyframes rise{
+  0%  {transform:translateY(100vh) translateX(0) rotate(0deg);opacity:0}
+  15% {opacity:.7}
+  85% {opacity:.3}
+  100%{transform:translateY(-5vh) translateX(var(--x)) rotate(360deg);opacity:0}
+}
+
+/* ── PAGE SYSTEM ─────────────────────────────── */
+.page{display:none;min-height:100vh;width:100%;align-items:flex-start;justify-content:center;padding:48px 20px;position:relative;z-index:1}
+.page.visible{display:flex}
+
+/* ── SHARED CARD ─────────────────────────────── */
+.wrap   {width:100%;max-width:500px}
+.dc-wrap{width:100%;max-width:540px}
+
+.card,.dc-card{
+  background:linear-gradient(158deg,#fdfbf4 0%,#faf5e6 40%,#f5edd4 100%);
+  position:relative;overflow:hidden;
+  box-shadow:
+    0 2px 0 rgba(180,140,50,.25),
+    0 8px 0 rgba(180,140,50,.1),
+    0 40px 100px rgba(140,100,20,.25),
+    0 80px 160px rgba(100,70,10,.15),
+    inset 0 0 80px rgba(212,175,55,.06);
+}
+.card   {animation:reveal 1.6s var(--ease-out) both}
+.dc-card{animation:reveal 1.2s var(--ease-out) both}
+
+@keyframes reveal{
+  from{opacity:0;transform:translateY(50px) scale(.97) rotate(-.2deg)}
+  to  {opacity:1;transform:translateY(0) scale(1) rotate(0deg)}
+}
+.card::before,.dc-card::before{
+  content:'';position:absolute;inset:0;pointer-events:none;z-index:10;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+}
+
+/* Vinotinto ribbon */
+.vino-ribbon{height:3px;background:linear-gradient(90deg,transparent,var(--vino) 25%,var(--vino-dark) 50%,var(--vino) 75%,transparent);opacity:.8}
+
+/* Frames */
+.frame-outer{position:absolute;inset:14px;border:1px solid rgba(180,130,40,.22);pointer-events:none;z-index:3}
+.frame-inner{position:absolute;inset:20px;border:1px solid rgba(180,130,40,.10);pointer-events:none;z-index:3}
+.corner-gem{position:absolute;width:10px;height:10px;background:var(--gold);transform:rotate(45deg);z-index:4;opacity:.5}
+.cg-tl{top:9px;left:9px}   .cg-tr{top:9px;right:9px}
+.cg-bl{bottom:9px;left:9px} .cg-br{bottom:9px;right:9px}
+.vino-corner{position:absolute;width:14px;height:14px;border-style:solid;border-color:rgba(123,28,59,.28);z-index:5;pointer-events:none}
+.vc-tl{top:20px;left:20px;border-width:1px 0 0 1px}
+.vc-tr{top:20px;right:20px;border-width:1px 1px 0 0}
+.vc-bl{bottom:20px;left:20px;border-width:0 0 1px 1px}
+.vc-br{bottom:20px;right:20px;border-width:0 1px 1px 0}
+
+/* Rule separator */
+.rule{display:flex;align-items:center;gap:10px;margin:12px 0}
+.rl  {flex:1;height:1px;background:linear-gradient(to right,transparent,var(--gold),transparent);opacity:.4}
+.rc  {display:flex;gap:5px;align-items:center}
+.rd  {width:4px;height:4px;background:var(--gold);border-radius:50%;opacity:.6}
+.rline{width:14px;height:1px;background:var(--gold);opacity:.5}
+.rule-vino .rl   {background:linear-gradient(to right,transparent,var(--vino),transparent);opacity:.25}
+.rule-vino .rd   {background:var(--vino);opacity:.4}
+.rule-vino .rline{background:var(--vino);opacity:.35}
+
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(10px)}
+  to  {opacity:1;transform:translateY(0)}
+}
+
+/* ═══════════════════════════════════════════════
+   INVITATION PAGE
+═══════════════════════════════════════════════ */
+.inv-header{padding:44px 60px 24px;text-align:center;position:relative;z-index:2}
+
+.inv-ornament{margin-bottom:16px;opacity:0;animation:fadeUp .8s .4s var(--ease-out) forwards}
+
+.guest-greeting{
+  font-family:'Cormorant',serif;font-size:14px;font-style:italic;font-weight:300;
+  color:rgba(90,62,10,.85);letter-spacing:.12em;margin-bottom:18px;
+  opacity:0;animation:fadeUp .8s .3s var(--ease-out) forwards
+}
+#guest-name{font-weight:600;font-style:normal;color:var(--gold-dark)}
+
+.eyebrow{
+  font-weight:300;font-size:8px;letter-spacing:.48em;color:var(--gold-mid);
+  text-transform:uppercase;opacity:0;animation:fadeUp .8s .6s var(--ease-out) forwards;margin-bottom:16px
+}
+.std{
+  font-weight:300;font-size:9px;letter-spacing:.6em;color:#8B6614;
+  text-transform:uppercase;opacity:0;animation:fadeUp .8s .8s var(--ease-out) forwards
+}
+
+.name-section{
+  padding:0 60px;text-align:center;position:relative;z-index:2;
+  opacity:0;animation:fadeUp 1s 1s var(--ease-out) forwards
+}
+.name-first{
+  font-family:'Cormorant',serif;font-size:76px;font-weight:300;font-style:italic;
+  color:var(--gold-text);line-height:1;letter-spacing:-.01em
+}
+.name-last{
+  font-weight:400;font-size:15px;letter-spacing:.35em;
+  color:var(--gold-mid);margin-top:8px;text-transform:uppercase
+}
+
+.inv-center{padding:24px 60px;text-align:center;position:relative;z-index:2}
+
+.occasion{
+  font-family:'Cormorant',serif;font-size:15px;font-style:italic;font-weight:300;
+  color:#6B4E10;letter-spacing:.1em;opacity:0;animation:fadeUp .8s 1.2s var(--ease-out) forwards;margin-bottom:28px
+}
+
+/* Date box */
+.date-wrap{
+  opacity:0;animation:fadeUp 1s 1.35s var(--ease-out) forwards;
+  position:relative
+}
+.date-wrap::before,.date-wrap::after{
+  content:'';position:absolute;width:16px;height:16px;border-style:solid;
+  border-color:rgba(180,130,40,.42);z-index:1;pointer-events:none
+}
+.date-wrap::before{top:-1px;right:-1px;border-width:2px 2px 0 0}
+.date-wrap::after {bottom:-1px;left:-1px;border-width:0 0 2px 2px}
+
+.date-bg{
+  background:linear-gradient(135deg,rgba(212,175,55,.10),rgba(180,130,40,.06));
+  border:1px solid rgba(180,130,40,.18);padding:24px 36px 20px;position:relative
+}
+.date-bg::before,.date-bg::after{
+  content:'';position:absolute;width:16px;height:16px;border-style:solid;
+  border-color:rgba(123,28,59,.50)
+}
+.date-bg::before{top:-1px;left:-1px;border-width:2px 0 0 2px}
+.date-bg::after {bottom:-1px;right:-1px;border-width:0 2px 2px 0}
+
+.date-day-label{font-weight:300;font-size:8px;letter-spacing:.6em;color:var(--gold-mid);text-transform:uppercase;margin-bottom:4px}
+.date-num{font-family:'Cormorant',serif;font-size:108px;font-weight:600;color:var(--gold-dark);line-height:1;letter-spacing:-.03em;text-align:center}
+.date-month-year{font-weight:400;font-size:15px;letter-spacing:.3em;color:var(--gold-dark);margin-top:4px;text-transform:uppercase}
+
+/* Info row */
+.info-row{display:flex;margin-top:24px;opacity:0;animation:fadeUp .8s 1.55s var(--ease-out) forwards}
+.info-cell{flex:1;text-align:center;padding:0 16px;position:relative}
+.info-cell+.info-cell::before{
+  content:'';position:absolute;left:0;top:20%;height:60%;width:1px;background:rgba(180,130,40,.25)
+}
+.info-label{font-weight:300;font-size:7px;letter-spacing:.55em;color:#7A5C10;text-transform:uppercase;display:block;margin-bottom:6px}
+.info-val  {font-family:'Cormorant',serif;font-size:16px;font-style:italic;font-weight:400;color:var(--gold-text);line-height:1.3}
+
+/* Address */
+.address{margin-top:10px;opacity:0;animation:fadeUp .8s 1.65s var(--ease-out) forwards}
+.address-text{font-weight:300;font-size:7.5px;letter-spacing:.28em;color:rgba(90,62,10,.72);text-transform:uppercase}
+
+/* Lluvia de sobres */
+.sobres{
+  margin-top:22px;opacity:0;animation:fadeUp .8s 1.78s var(--ease-out) forwards;
+  display:flex;align-items:center;justify-content:center;gap:12px;
+  padding:14px 18px;
+  background:rgba(212,175,55,.06);
+  border:1px solid rgba(180,130,40,.14)
+}
+.sobres-text{
+  font-family:'Cormorant',serif;font-size:13px;font-style:italic;font-weight:300;
+  color:rgba(107,78,16,.75);letter-spacing:.04em;text-align:left;line-height:1.55
+}
+
+/* Dresscode CTA */
+.dresscode-btn{
+  display:block;width:100%;text-align:center;text-decoration:none;cursor:pointer;border:none;
+  margin-top:18px;opacity:0;animation:fadeUp .8s 1.9s var(--ease-out) forwards;
+  padding:15px 32px;
+  background:linear-gradient(135deg,var(--vino) 0%,var(--vino-dark) 100%);
+  color:rgba(253,248,230,.9);font-family:'Cinzel',serif;font-weight:400;font-size:9px;
+  letter-spacing:.5em;text-transform:uppercase;
+  transition:transform 200ms var(--ease-out),box-shadow 200ms var(--ease-out);
+  box-shadow:0 4px 20px rgba(123,28,59,.22),inset 0 1px 0 rgba(255,255,255,.1)
+}
+@media(hover:hover)and(pointer:fine){
+  .dresscode-btn:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(123,28,59,.32),inset 0 1px 0 rgba(255,255,255,.1)}
+}
+.dresscode-btn:active{transform:translateY(0) scale(.98)}
+
+/* Tagline */
+.tagline{margin-top:22px;opacity:0;animation:fadeUp .8s 2s var(--ease-out) forwards}
+.tagline-text{font-family:'Cormorant',serif;font-size:12px;font-style:italic;font-weight:300;color:rgba(90,62,10,.72);letter-spacing:.15em}
+
+/* Footer */
+.inv-footer{
+  border-top:1px solid rgba(180,130,40,.15);
+  padding:18px 60px 44px;text-align:center;position:relative;z-index:2;
+  opacity:0;animation:fadeUp .8s 2.1s var(--ease-out) forwards
+}
+.rsvp{font-weight:300;font-size:8px;letter-spacing:.45em;color:var(--gold-dark);text-transform:uppercase;opacity:.9}
+.rsvp-wa{
+  display:inline-flex;align-items:center;justify-content:center;
+  margin-top:10px;font-family:'Cinzel',serif;font-weight:300;font-size:9.5px;
+  letter-spacing:.38em;color:rgba(90,52,8,.78);text-transform:uppercase;
+  text-decoration:none;border:1px solid rgba(180,130,40,.28);
+  padding:10px 22px;transition:all 200ms var(--ease-out);
+  background:rgba(212,175,55,.04);
+}
+@media(hover:hover)and(pointer:fine){
+  .rsvp-wa:hover{background:rgba(212,175,55,.10);border-color:rgba(180,130,40,.55);color:var(--gold-dark)}
+}
+.rsvp-wa:active{transform:scale(.98)}
+.print-btn{
+  display:block;margin:16px auto 0;font-family:'Cinzel',serif;font-weight:300;font-size:8px;
+  letter-spacing:.5em;color:rgba(160,120,40,.45);text-transform:uppercase;cursor:pointer;
+  background:none;border:1px solid rgba(180,130,40,.2);padding:10px 28px;transition:all 200ms
+}
+@media(hover:hover)and(pointer:fine){.print-btn:hover{color:var(--gold-mid);border-color:rgba(180,130,40,.5);background:rgba(212,175,55,.06)}}
+
+/* ═══════════════════════════════════════════════
+   DRESSCODE PAGE
+═══════════════════════════════════════════════ */
+.dc-header{padding:44px 56px 24px;text-align:center;position:relative;z-index:2}
+.dc-eyebrow{
+  font-weight:300;font-size:7.5px;letter-spacing:.45em;color:var(--gold-dark);
+  text-transform:uppercase;margin-bottom:14px;opacity:0;animation:fadeUp .7s .3s var(--ease-out) forwards
+}
+.dc-title{
+  font-family:'Cormorant',serif;font-size:62px;font-weight:300;font-style:italic;
+  color:var(--gold-text);line-height:1;opacity:0;animation:fadeUp .9s .5s var(--ease-out) forwards
+}
+.dc-subtitle{
+  font-weight:300;font-size:8px;letter-spacing:.4em;color:rgba(90,62,10,.82);
+  text-transform:uppercase;margin-top:10px;opacity:0;animation:fadeUp .7s .7s var(--ease-out) forwards
+}
+
+.dc-body{padding:20px 40px 28px;position:relative;z-index:2}
+
+.dc-intro{text-align:center;margin-bottom:22px;opacity:0;animation:fadeUp .7s .9s var(--ease-out) forwards}
+.dc-intro-text{
+  font-family:'Cormorant',serif;font-size:14px;font-style:italic;font-weight:300;
+  color:rgba(90,62,10,.88);letter-spacing:.06em;line-height:1.7
+}
+
+/* Two-column layout */
+.dc-cols{
+  display:grid;grid-template-columns:1fr 1fr;
+  border:1px solid rgba(180,130,40,.18);
+  opacity:0;animation:fadeUp .9s 1.1s var(--ease-out) forwards
+}
+.dc-col{padding:28px 22px;text-align:center}
+.dc-col:first-child{border-right:1px solid rgba(180,130,40,.18)}
+
+.dc-col-title{
+  font-weight:400;font-size:8.5px;letter-spacing:.55em;
+  color:var(--vino);text-transform:uppercase;margin-bottom:20px
+}
+/* Color chips */
+.dc-colors{margin:14px 0 18px}
+.dc-colors-label{font-weight:300;font-size:6.5px;letter-spacing:.4em;color:rgba(90,62,10,.78);text-transform:uppercase;margin-bottom:8px}
+.dc-chips{display:flex;flex-wrap:wrap;gap:5px;justify-content:center}
+.chip{width:22px;height:22px;border:1px solid rgba(180,130,40,.22);cursor:default;position:relative}
+.chip[data-name]:hover::after{
+  content:attr(data-name);position:absolute;bottom:calc(100% + 4px);left:50%;transform:translateX(-50%);
+  font-family:'Cinzel',serif;font-size:7px;letter-spacing:.2em;color:var(--gold-dark);
+  background:rgba(253,248,240,.95);border:1px solid rgba(180,130,40,.2);
+  padding:3px 6px;white-space:nowrap;pointer-events:none;
+  animation:fadeUp .15s var(--ease-out) forwards
+}
+
+/* Rules */
+.dc-rules{text-align:left}
+.dc-rule-item{display:flex;align-items:flex-start;gap:8px;margin-bottom:9px}
+.dc-rule-dot{flex-shrink:0;width:3px;height:3px;background:var(--gold);border-radius:50%;margin-top:8px}
+.dc-rule-text{font-family:'Cormorant',serif;font-size:13px;font-style:italic;font-weight:300;color:rgba(107,78,16,.8);line-height:1.4}
+
+/* Note */
+.dc-note{
+  text-align:center;padding:14px 24px;
+  background:rgba(123,28,59,.04);
+  border-top:1px solid rgba(123,28,59,.10);border-bottom:1px solid rgba(123,28,59,.10);
+  margin:22px 0;opacity:0;animation:fadeUp .7s 1.4s var(--ease-out) forwards
+}
+.dc-note-text{
+  font-family:'Cormorant',serif;font-size:13px;font-style:italic;font-weight:300;
+  color:rgba(90,18,40,.85);letter-spacing:.05em;line-height:1.7
+}
+
+/* Back button */
+.back-btn{
+  display:block;text-align:center;cursor:pointer;padding:14px 32px;margin:0 auto;
+  border:1px solid rgba(180,130,40,.3);color:var(--gold-mid);font-family:'Cinzel',serif;
+  font-weight:300;font-size:8px;letter-spacing:.5em;text-transform:uppercase;
+  background:none;transition:all 200ms;
+  opacity:0;animation:fadeUp .7s 1.55s var(--ease-out) forwards
+}
+@media(hover:hover)and(pointer:fine){.back-btn:hover{background:rgba(212,175,55,.08);border-color:rgba(180,130,40,.55);color:var(--gold-dark)}}
+.back-btn:active{transform:scale(.98)}
+
+/* DC Footer */
+.dc-footer{
+  border-top:1px solid rgba(180,130,40,.12);
+  padding:18px 40px 38px;text-align:center;position:relative;z-index:2;
+  opacity:0;animation:fadeUp .7s 1.7s var(--ease-out) forwards
+}
+.dc-footer-text{font-weight:300;font-size:7.5px;letter-spacing:.32em;color:rgba(90,62,10,.68);text-transform:uppercase;line-height:2.2}
+
+/* ── RESPONSIVE ──────────────────────────────── */
+@media(max-width:480px){
+  .inv-header,.dc-header{padding:36px 28px 20px}
+  .name-section,.inv-center{padding-left:28px;padding-right:28px}
+  .inv-footer{padding:16px 28px 36px}
+  .dc-body,.dc-footer{padding-left:24px;padding-right:24px}
+  .name-first{font-size:56px}
+  .date-num{font-size:84px}
+  .dc-title{font-size:48px}
+  .dc-cols{grid-template-columns:1fr}
+  .dc-col:first-child{border-right:none;border-bottom:1px solid rgba(180,130,40,.18)}
+  .frame-outer{inset:8px}
+  .frame-inner{inset:14px}
+  .vino-corner{display:none}
+  .page{padding:32px 16px}
+}
+
+@media print{
+  .bg,.dust,.print-btn,.back-btn{display:none}
+  body{background:#fdfbf4}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .card,.dc-card,.inv-ornament,.eyebrow,.std,.name-section,
+  .occasion,.date-wrap,.info-row,.address,.sobres,.dresscode-btn,
+  .tagline,.inv-footer,.dc-eyebrow,.dc-title,.dc-subtitle,.dc-intro,
+  .dc-cols,.dc-note,.back-btn,.dc-footer{
+    animation:none;opacity:1;transform:none
+  }
+}
+
+</style>
+</head>
+<body>
+<div class="bg"></div>
+<div class="dust" id="dust"></div>
+
+<!-- ════════════════════════════════════════════
+     INVITACIÓN
+════════════════════════════════════════════ -->
+<div id="page-invite" class="page visible">
+<div class="wrap">
+<div class="card">
+
+  <div class="vino-ribbon"></div>
+  <div class="frame-outer"></div>
+  <div class="frame-inner"></div>
+  <div class="corner-gem cg-tl"></div><div class="corner-gem cg-tr"></div>
+  <div class="corner-gem cg-bl"></div><div class="corner-gem cg-br"></div>
+  <div class="vino-corner vc-tl"></div><div class="vino-corner vc-tr"></div>
+  <div class="vino-corner vc-bl"></div><div class="vino-corner vc-br"></div>
+
+  <!-- Header -->
+  <div class="inv-header">
+    <div class="inv-ornament">
+      <svg width="180" height="36" viewBox="0 0 180 36" fill="none">
+        <line x1="90" y1="2"   x2="90"  y2="34"  stroke="#C9A03A" stroke-width=".5" opacity=".4"/>
+        <line x1="2"  y1="18"  x2="178" y2="18"  stroke="#C9A03A" stroke-width=".5" opacity=".22"/>
+        <line x1="20" y1="2"   x2="90"  y2="34"  stroke="#C9A03A" stroke-width=".5" opacity=".18"/>
+        <line x1="160" y1="2"  x2="90"  y2="34"  stroke="#C9A03A" stroke-width=".5" opacity=".18"/>
+        <line x1="55" y1="2"   x2="90"  y2="34"  stroke="#C9A03A" stroke-width=".5" opacity=".18"/>
+        <line x1="125" y1="2"  x2="90"  y2="34"  stroke="#C9A03A" stroke-width=".5" opacity=".18"/>
+        <path d="M16 34 Q90 -2 164 34"  stroke="#C9A03A" stroke-width=".5" fill="none" opacity=".28"/>
+        <path d="M36 34 Q90 8  144 34"  stroke="#C9A03A" stroke-width=".5" fill="none" opacity=".22"/>
+        <circle cx="90"  cy="2"  r="2.5" fill="#7B1C3B" opacity=".65"/>
+        <circle cx="55"  cy="2"  r="1.5" fill="#C9A03A" opacity=".4"/>
+        <circle cx="125" cy="2"  r="1.5" fill="#C9A03A" opacity=".4"/>
+        <circle cx="20"  cy="2"  r="1"   fill="#C9A03A" opacity=".28"/>
+        <circle cx="160" cy="2"  r="1"   fill="#C9A03A" opacity=".28"/>
+        <circle cx="2"   cy="18" r="1.5" fill="#C9A03A" opacity=".3"/>
+        <circle cx="178" cy="18" r="1.5" fill="#C9A03A" opacity=".3"/>
+      </svg>
+    </div>
+
+    <p class="guest-greeting" id="guest-greeting">Para: <span id="guest-name">Invitado/a</span></p>
+
+    <div class="rule" style="margin-top:4px">
+      <div class="rl"></div>
+      <div class="rc"><div class="rd"></div><div class="rline"></div><div class="rd"></div></div>
+      <div class="rl"></div>
+    </div>
+  </div>
+
+  <!-- Name -->
+  <div class="name-section">
+    <div class="name-first">Sebastian</div>
+    <div class="name-last">Estrada Carranza</div>
+  </div>
+
+  <!-- Center content -->
+  <div class="inv-center">
+
+    <p class="occasion">te invita a su Fiesta de Grado</p>
+
+    <!-- Date -->
+    <div class="date-wrap">
+      <div class="date-bg">
+        <div class="date-day-label">Sábado</div>
+        <div class="date-num">14</div>
+        <div class="date-month-year">Noviembre · 2026</div>
+      </div>
+    </div>
+
+    <!-- Info row -->
+    <div class="info-row">
+      <div class="info-cell">
+        <span class="info-label">hora</span>
+        <span class="info-val">6:00<br>p.m.</span>
+      </div>
+      <div class="info-cell">
+        <span class="info-label">lugar</span>
+        <span class="info-val">Centro de Convenciones<br>Cafam Floresta<br><span style="font-size:12px;letter-spacing:.06em;opacity:.78">· Salón Gran VIP ·</span></span>
+      </div>
+      <div class="info-cell">
+        <span class="info-label">ciudad</span>
+        <span class="info-val">Bogotá<br>Colombia</span>
+      </div>
+    </div>
+
+    <!-- Address -->
+    <div class="address">
+      <p class="address-text">Av. Cra 68 # 90–88 · Bogotá</p>
+    </div>
+
+    <!-- Vino divider -->
+    <div class="rule rule-vino" style="margin:20px 0 18px">
+      <div class="rl"></div>
+      <div class="rc"><div class="rd"></div><div class="rline"></div><div class="rd"></div></div>
+      <div class="rl"></div>
+    </div>
+
+    <!-- Dresscode CTA -->
+    <button class="dresscode-btn" onclick="showPage('page-dresscode')">
+      Ver Dresscode &nbsp;&nbsp;›
+    </button>
+
+    <!-- Tagline -->
+    <div class="tagline">
+      <div class="rule" style="margin:20px 0 14px">
+        <div class="rl"></div>
+        <div class="rc"><div class="rd"></div><div class="rline"></div><div class="rd"></div></div>
+        <div class="rl"></div>
+      </div>
+      <p class="tagline-text">Cena · Música · Celebración</p>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <div class="inv-footer">
+    <p class="rsvp">R.S.V.P. antes del 1 de octubre</p>
+    <a class="rsvp-wa"
+       href="https://wa.me/573187070444?text=Hola%2C%20confirmo%20mi%20asistencia%20a%20la%20Fiesta%20de%20Grado%20de%20Sebastian%20Estrada%20Carranza%20el%2014%20de%20noviembre."
+       target="_blank" rel="noopener">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" style="display:inline-block;vertical-align:middle;margin-right:5px;margin-top:-2px">
+        <path d="M20.52 3.48A11.93 11.93 0 0 0 12 0C5.37 0 0 5.37 0 12c0 2.11.55 4.17 1.6 5.99L0 24l6.18-1.62A11.97 11.97 0 0 0 12 24c6.63 0 12-5.37 12-12 0-3.21-1.25-6.22-3.48-8.52zM12 22c-1.85 0-3.66-.5-5.24-1.44l-.38-.22-3.9 1.02 1.04-3.8-.25-.4A9.94 9.94 0 0 1 2 12C2 6.48 6.48 2 12 2c2.67 0 5.18 1.04 7.07 2.93A9.94 9.94 0 0 1 22 12c0 5.52-4.48 10-10 10zm5.47-7.38c-.3-.15-1.77-.87-2.04-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.6.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51-.17-.01-.37-.01-.57-.01-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48 0 1.46 1.07 2.87 1.22 3.07.15.2 2.1 3.2 5.08 4.49.71.31 1.27.49 1.7.62.72.23 1.37.2 1.88.12.57-.09 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.12-.27-.19-.57-.34z" fill="rgba(90,52,8,0.72)"/>
+      </svg>
+      +57 318 707 0444
+    </a>
+  </div>
+
+</div><!-- /card -->
+</div><!-- /wrap -->
+</div><!-- /page-invite -->
+
+
+<!-- ════════════════════════════════════════════
+     DRESSCODE
+════════════════════════════════════════════ -->
+<div id="page-dresscode" class="page">
+<div class="dc-wrap">
+<div class="dc-card">
+
+  <div class="vino-ribbon"></div>
+  <div class="frame-outer"></div>
+  <div class="frame-inner"></div>
+  <div class="corner-gem cg-tl"></div><div class="corner-gem cg-tr"></div>
+  <div class="corner-gem cg-bl"></div><div class="corner-gem cg-br"></div>
+  <div class="vino-corner vc-tl"></div><div class="vino-corner vc-tr"></div>
+  <div class="vino-corner vc-bl"></div><div class="vino-corner vc-br"></div>
+
+  <!-- DC Header -->
+  <div class="dc-header">
+    <p class="dc-eyebrow">Fiesta de Grado · Sebastian Estrada Carranza · 14.11.2026</p>
+    <div class="dc-title">Dresscode</div>
+    <p class="dc-subtitle">Etiqueta Formal</p>
+    <div class="rule" style="margin-top:16px">
+      <div class="rl"></div>
+      <div class="rc"><div class="rd"></div><div class="rline"></div><div class="rd"></div></div>
+      <div class="rl"></div>
+    </div>
+  </div>
+
+  <!-- DC Body -->
+  <div class="dc-body">
+
+    <div class="dc-intro">
+      <p class="dc-intro-text">La noche merece tu mejor versión.<br>El código de vestimenta es etiqueta formal.</p>
+    </div>
+
+    <!-- Two columns -->
+    <div class="dc-cols">
+
+      <!-- CABALLEROS -->
+      <div class="dc-col">
+        <p class="dc-col-title">Caballeros</p>
+
+        <div class="dc-colors">
+          <p class="dc-colors-label">Colores sugeridos</p>
+          <div class="dc-chips">
+            <div class="chip" style="background:#1C1C1E" data-name="Negro"></div>
+            <div class="chip" style="background:#0E1F38" data-name="Navy"></div>
+            <div class="chip" style="background:#2A2A2A" data-name="Carbón"></div>
+            <div class="chip" style="background:#4A1628" data-name="Burdeos"></div>
+          </div>
+        </div>
+
+        <div class="dc-rules">
+          <div class="dc-rule-item">
+            <div class="dc-rule-dot"></div>
+            <p class="dc-rule-text">Traje completo con saco</p>
+          </div>
+          <div class="dc-rule-item">
+            <div class="dc-rule-dot"></div>
+            <p class="dc-rule-text">Corbata obligatoria</p>
+          </div>
+          <div class="dc-rule-item">
+            <div class="dc-rule-dot"></div>
+            <p class="dc-rule-text">Camisa de vestir</p>
+          </div>
+          <div class="dc-rule-item">
+            <div class="dc-rule-dot"></div>
+            <p class="dc-rule-text">Zapatos formales</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- DAMAS -->
+      <div class="dc-col">
+        <p class="dc-col-title">Damas</p>
+
+<div class="dc-colors">
+          <p class="dc-colors-label">Colores sugeridos</p>
+          <div class="dc-chips">
+            <div class="chip" style="background:#1C1C1E" data-name="Negro"></div>
+            <div class="chip" style="background:#4A1628" data-name="Burdeos"></div>
+            <div class="chip" style="background:#0E1F38" data-name="Navy"></div>
+            <div class="chip" style="background:#1A3A2C" data-name="Esmeralda"></div>
+            <div class="chip" style="background:#C9A03A" data-name="Dorado"></div>
+            <div class="chip" style="background:#E4D4BC" data-name="Nude"></div>
+          </div>
+        </div>
+
+        <div class="dc-rules">
+          <div class="dc-rule-item">
+            <div class="dc-rule-dot"></div>
+            <p class="dc-rule-text">Vestido formal, corto o largo</p>
+          </div>
+          <div class="dc-rule-item">
+            <div class="dc-rule-dot"></div>
+            <p class="dc-rule-text">Traje sastre elegante</p>
+          </div>
+          <div class="dc-rule-item">
+            <div class="dc-rule-dot"></div>
+            <p class="dc-rule-text">Zapatos de tacón o vestir</p>
+          </div>
+          <div class="dc-rule-item">
+            <div class="dc-rule-dot"></div>
+            <p class="dc-rule-text">Accesorios discretos</p>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /dc-cols -->
+
+    <!-- Note -->
+    <div class="dc-note">
+      <p class="dc-note-text">Por favor evita ropa casual, jeans o tenis.<br>El blanco está reservado para el anfitrión.</p>
+    </div>
+
+    <!-- Back button -->
+    <button class="back-btn" onclick="showPage('page-invite')">
+      ‹ &nbsp; Volver a la Invitación
+    </button>
+
+  </div><!-- /dc-body -->
+
+  <!-- DC Footer -->
+  <div class="dc-footer">
+    <p class="dc-footer-text">
+      Centro de Convenciones Cafam Floresta · Salón Gran VIP<br>
+      Av. Cra 68 # 90–88 · Bogotá · Sábado 14 de Noviembre, 2026 · 6:00 p.m.
+    </p>
+  </div>
+
+</div><!-- /dc-card -->
+</div><!-- /dc-wrap -->
+</div><!-- /page-dresscode -->
+
+
+<script>
+/* Read ?para= URL parameter for personalized guest name */
+(function(){
+  var params = new URLSearchParams(window.location.search);
+  var name = params.get('para') || params.get('Para') || params.get('nombre') || '';
+  if(name){
+    document.getElementById('guest-name').textContent = decodeURIComponent(name);
+  }
+})();
+
+/* Floating dust particles */
+(function(){
+  var dust = document.getElementById('dust');
+  for(var i=0;i<25;i++){
+    var m = document.createElement('div');
+    m.className = 'mote';
+    var sz = 2 + Math.random()*5;
+    m.style.cssText =
+      'width:'+sz+'px;height:'+sz+'px;' +
+      'left:'+(Math.random()*100)+'vw;' +
+      '--d:'+(10+Math.random()*14)+'s;' +
+      '--delay:'+(Math.random()*12)+'s;' +
+      '--x:'+(Math.random()-.5)*100+'px';
+    dust.appendChild(m);
+  }
+})();
+
+/* Page navigation */
+function showPage(id){
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('visible')});
+  document.getElementById(id).classList.add('visible');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>
